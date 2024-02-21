@@ -1,0 +1,94 @@
+class MinHeap:
+    def __init__(self):
+        # Initialize an empty list to hold the heap elements
+        self.heap = []
+
+    def parent(self, i):
+        # Calculate the index of the parent node for the given index i
+        return (i - 1) >> 1
+
+    def left(self, i):
+        # Calculate the index of the left child node for the given index i
+        return (i << 1) + 1
+
+    def right(self, i):
+        # Calculate the index of the right child node for the given index i
+        return (i << 1) + 2
+
+    def heapify(self, i):
+        # Ensure the heap property starting from the node at index i
+        smallest = i
+        left = self.left(i)
+        right = self.right(i)
+        n = len(self.heap)
+        # Check if the left child is smaller than the current smallest node
+        if left < n and self.heap[left] < self.heap[smallest]:
+            smallest = left
+        # Check if the right child is smaller than the current smallest node
+        if right < n and self.heap[right] < self.heap[smallest]:
+            smallest = right
+        # Swap nodes if necessary and continue heapifying
+        if smallest != i:
+            self.heap[i], self.heap[smallest] = self.heap[smallest], self.heap[i]
+            self.heapify(smallest)
+
+    def build_min_heap(self, arr):
+        # Create a min heap from the given array
+        self.heap = arr
+        n = len(arr)
+        # Begin from the last non-leaf node and heapify each node upwards
+        for i in range(n >> 1, -1, -1):
+            self.heapify(i)
+
+    def get_min(self):
+        # Return the minimum element (root node) of the min heap
+        if not self.heap:
+            return None
+        return self.heap[0]
+
+    def pop_min(self):
+        # Remove and return the minimum element (root node) of the min heap
+        if not self.heap:
+            return None
+        min_val = self.heap[0]
+        # Swap the root node with the last node in the heap
+        self.heap[0] = self.heap[-1]
+        # Delete the last node
+        del self.heap[-1]
+        # Heapify the heap starting from the root node
+        self.heapify(0)
+        return min_val
+
+# Example usage:
+heap = MinHeap()
+print('# Example with integers')
+print("\n")
+
+heap.build_min_heap([14, 100, 33, 45, 12])
+print("Initial min heap:", heap.heap)  # Output: [12, 14, 33, 45, 100]
+
+print("Root node (min):", heap.get_min())  # Output: 12
+
+print("Popping min element:", heap.pop_min())  # Output: 12
+print("Min heap after popping:", heap.heap)  # Output: [14, 45, 33, 100]
+print("\n")
+print("# Example with floats")
+print("\n")
+heap.build_min_heap([17.5, 12.3, 13.1, 15.8, 51.7])
+print("Initial min heap:", heap.heap)  # Output: [12.3, 15.8, 13.1, 17.5, 51.7]
+
+print("Root node (min):", heap.get_min())  # Output: 12.3
+
+print("Popping min element:", heap.pop_min())  # Output: 12.3
+print("Min heap after popping:", heap.heap)# Min heap after popping: [13.1, 15.8, 51.7, 17.5]
+print("\n")
+
+print('# Example with custom data structures (e.g., tuples)')
+print("\n")
+heap.build_min_heap([(47, 'Pink'), (12, 'Blue'), (34, 'Yellow'), (11, 'orange'), (29, 'Green')])
+print("Initial min heap:", heap.heap)  #: [(11, 'orange'), (12, 'Blue'), (34, 'Yellow'), (47, 'Pink'), (29, 'Green')]
+
+print("Root node (min):", heap.get_min())  # (11, 'orange')
+
+print("Popping min element:", heap.pop_min())  # (11, 'orange')
+print("Min heap after popping:", heap.heap)  # [(12, 'Blue'), (29, 'Green'), (34, 'Yellow'), (47, 'Pink')]
